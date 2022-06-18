@@ -1,40 +1,25 @@
-name: 'lab04'
+name: CMake
+
 on:
   push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
 
 jobs:
   build:
+    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
+    # You can convert this to a matrix build if you need cross-platform coverage.
+    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-latest
-  
-    steps:      
-      - name: Git clone
-        uses: actions/checkout@v3
-        with:
-          ref: lab04_master
-        
-      - name: Git checkout
-        run : git checkout lab04_master
-        
-      - name: Git pull
-        run : git pull origin lab04_master
-    
-      - name: Test_formatter_lib
-        working-directory: formatter_lib
-        shell: bash
-        run: |
-          cmake -H. -B_build
-          cmake --build _build
-          
-      - name: Test_formatter_ex_lib
-        working-directory: formatter_ex_lib
-        shell: bash
-        run: |
-          cmake -H. -B_build
-          cmake --build _build
-          
-      - name: Test_hello_world_application
-        working-directory: hello_world_application
-        shell: bash
-        run: |
-          cmake -H. -B_build
-          cmake --build _build
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build
+      # Build your program with the given configuration
+      run: cmake -H. -B_build && cmake --build _build
